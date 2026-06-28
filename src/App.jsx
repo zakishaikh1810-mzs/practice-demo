@@ -3,7 +3,8 @@ import { useState ,useEffect } from "react";
 function App(){
 const [products , setProducts]= useState([]);
 const [search ,setSearch] = useState("");
-const [category ,setCategory]=useState("all");
+const [category ,setCategory]=useState("all"); 
+const [cart, setCart]=useState([]);
 useEffect(()=>{
   axios
   .get("https://fakestoreapi.com/products")
@@ -15,13 +16,19 @@ useEffect(()=>{
     });
 }, []);
 
-
+function addToCart(product){
+  setCart([...cart ,product]);
+}
 return(
   
-  <div className="min-h-screen bg-gray-100">
-    <div className="bg-white shadow-md p-5 ">
-      <h1 className="text-3xl font-bold text-center">Mini Store</h1>
+  <div className=" bg-white p-5">
+    <div className="bg-white shadow-md p-5 flex justify-between items-center">
+      <h1 className="text-3xl font-bold text-center ">Mini Store</h1>
+      <span className="text-2xl  font-bold text-blue-600">
+        {cart.length}🛒
+      </span>
     </div>
+
 
     {/* search  */}
     <div className="max-w-6xl mx-auto p-5 flex flex-col ">
@@ -35,7 +42,6 @@ return(
 
       className="flex-1 p-3 border rounded-lg outline-none"
       />
-
 
       <select value={category}
       onChange={(e)=>
@@ -73,8 +79,8 @@ return(
               <p className="text-green-600 text-xl font-bold mt-2">
                 ₹ {item.price}
               </p>
-
-              <button className="w-full mt-4 bg-black text-white py-2 rounded-lg hover:bg-gray-800">
+              <button onClick={()=>addToCart(item)}
+              className="w-full mt-4 bg-black text-white py-2 rounded-lg hover:bg-gray-800">
                 Add To Cart
               </button>
             </div>
